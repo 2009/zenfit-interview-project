@@ -19,6 +19,12 @@ gem 'puma', '~> 3.7'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+# JWT Token Auth
+gem 'knock', '~> 2.1'
+
+# Authorization helper
+gem 'pundit', '~> 1.1'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
