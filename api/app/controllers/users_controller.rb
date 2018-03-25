@@ -4,19 +4,21 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
-    @users = User.all
+    @users = policy_scope(User)
 
     render json: @users
   end
 
   # GET /users/1
   def show
+    authorize @user
     render json: @user
   end
 
   # POST /users
   def create
-    @user = User.new(user_params)
+    @user = User.new(permitted_attributes(User))
+    authorize @user
 
     if @user.save
       render json: @user, status: :created, location: @user
@@ -27,7 +29,8 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
-    if @user.update(user_params)
+    authorize @user
+    if @user.update(permitted_attributes(@user))
       render json: @user
     else
       render json: @user.errors, status: :unprocessable_entity
@@ -36,6 +39,7 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
+    authorize @user
     @user.destroy
   end
 
@@ -43,10 +47,5 @@ class UsersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
-    end
-
-    # Only allow a trusted parameter "white list" through.
-    def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation)
     end
 end
